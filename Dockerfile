@@ -1,3 +1,4 @@
+
 ARG FROM
 FROM ${FROM} as builder
 
@@ -29,6 +30,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
       wheel
 
 ARG NETBOX_PATH
+
 COPY ${NETBOX_PATH}/requirements.txt requirements-container.txt /
 RUN \
     # We compile 'psycopg' in the build process
@@ -85,6 +87,7 @@ COPY ${NETBOX_PATH} /opt/netbox
 # Copy the modified 'requirements*.txt' files, to have the files actually used during installation
 COPY --from=builder /requirements.txt /requirements-container.txt /opt/netbox/
 
+# COPY wwt_plugin/setup.py /opt/netbox/wwt_plugin/setup.py
 COPY docker/configuration.docker.py /opt/netbox/netbox/netbox/configuration.py
 COPY docker/ldap_config.docker.py /opt/netbox/netbox/netbox/ldap_config.py
 COPY docker/docker-entrypoint.sh /opt/netbox/docker-entrypoint.sh
